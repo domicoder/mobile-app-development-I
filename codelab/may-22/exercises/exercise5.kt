@@ -12,10 +12,21 @@
 
 
 fun runExercises() {
-  runExercise5()
+  val savedUsername: String = "jose"
+  val savedPassword: String = "123456"
+  var enteredUsername: String = "jose"
+  var enteredPassword: String = "123456"
+
+  runExercise5(enteredUsername, enteredPassword, savedUsername, savedPassword)
+
+  enteredUsername = "jose1"
+  enteredPassword = "123456"
+
+  runExercise5(enteredUsername, enteredPassword, savedUsername, savedPassword)
+  
 }
 
-fun runExercise5() {
+fun runExercise5(enteredUsername: String, enteredPassword: String, savedUsername: String, savedPassword: String) {
   // Exercise 5: Login Attempt 🔑
   // Declare two immutable String variables: savedUsername and savedPassword. Initialize them with some values.
   // Declare two mutable String variables: enteredUsername and enteredPassword.
@@ -27,10 +38,7 @@ fun runExercise5() {
   // "Login Successful" if both match.
   // "Incorrect Password" if the username matches but the password doesn't.
   // "Incorrect Username" if the username doesn't match.
-  val savedUsername: String = "jose"
-  val savedPassword: String = "123456"
-  var enteredUsername: String = "jose"
-  var enteredPassword: String = "123456"
+  
   if (enteredUsername == savedUsername) {
       if (enteredPassword == savedPassword) {
           println("Login Successful")
