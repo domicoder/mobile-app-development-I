@@ -6,7 +6,7 @@ fun buildAquarium() {
     myAquarium.height = 80
     myAquarium.printSize()
     val aquariumBeta = Aquarium(height = 56, length = 160)
-    aquariumBeta.volume = 900
+//    aquariumBeta.volume = 900 => Kotlin: Cannot access 'volume': it is private in 'example/myapp/Aquarium'.
     aquariumBeta.printSize()
 
 //    using secondary constructor
