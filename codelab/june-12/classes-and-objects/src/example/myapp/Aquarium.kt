@@ -1,6 +1,6 @@
 package example.myapp
 
-class Aquarium(var length: Int = 32, var width: Int = 54, var height: Int = 130) {
+open class Aquarium(open var length: Int = 32, open var width: Int = 54, open var height: Int = 130) {
     init  {
         println("aquarium initializing")
     }
@@ -9,11 +9,16 @@ class Aquarium(var length: Int = 32, var width: Int = 54, var height: Int = 130)
 //        val volume = width * height * length / 1000
 //        println("Volume: $volume l")
 //    }
-    var volume: Int
+    open var volume: Int
         get() = width * height * length / 1000
-        private set(value) {
+        set(value) {
             height = (value * 1000) / (width * length)
         }
+
+    open val shape = "rectangle"
+
+    open var water: Double = 0.0
+        get() = volume * 0.9
 
 
     constructor(numberOfFish: Int) : this() {
@@ -26,6 +31,6 @@ class Aquarium(var length: Int = 32, var width: Int = 54, var height: Int = 130)
                 "Length: $length cm " +
                 "Height: $height cm ")
 
-        println("Volume: $volume l")
+        println("Volume: $volume liters Water: $water liters (${water / volume * 100.0}% full)")
     }
 }

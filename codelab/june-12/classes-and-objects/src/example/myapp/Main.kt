@@ -1,5 +1,8 @@
 package example.myapp
 
+import example.myapp.abstractclasses.Plecostomus
+import example.myapp.abstractclasses.Shark
+
 fun buildAquarium() {
     val myAquarium = Aquarium()
     myAquarium.printSize()
@@ -15,8 +18,23 @@ fun buildAquarium() {
     aquariumTrench.printSize()
     val volume = aquariumTrench.width * aquariumTrench.length * aquariumTrench.height / 1000
     println("Volume: $volume l.")
+
+//    (5) Learn about subclasses and inheritance
+    val myTowerTank = TowerTank(diameter = 25, height = 40)
+    myTowerTank.printSize()
+}
+
+fun makeFish() {
+    val shark = Shark()
+    val pleco = Plecostomus()
+
+    println("Shark: ${shark.color}")
+    shark.eat()
+    println("Plecostomus: ${pleco.color}")
+    pleco.eat()
 }
 
 fun main() {
     buildAquarium()
+    makeFish()
 }
