@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios Avanzados de Kotlin: Clases Especiales y Extensiones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Calm Slate -->
+    <!-- Application Structure Plan: A single-page dashboard displaying 10 advanced OOP exercises as interactive cards. The structure mirrors previous successful designs, using a responsive grid for scannability and a modal for detailed, focused instruction. This is ideal for presenting distinct, complex problems without overwhelming the user. -->
+    <!-- Visualization & Content Choices: The source document contains text-based programming exercises. Each is encapsulated in a card with a title, emoji, and snippet. The detailed steps are presented in an ordered list within a modal for clarity. This format is effective for instructional content. No data visualizations are needed. No SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-2">Ejercicios Avanzados de POO en Kotlin</h1>
+            <p class="text-md md:text-lg text-slate-600 max-w-3xl mx-auto">Practica con clases especiales, objetos, funciones de extensión y más. Haz clic en una tarjeta para ver el ejercicio.</p>
+        </header>
+
+        <main id="exercise-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Exercise cards will be dynamically inserted here -->
+        </main>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="exercise-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop bg-black bg-opacity-50 hidden opacity-0">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="sticky top-0 bg-white/80 backdrop-blur-sm p-4 sm:p-6 border-b border-slate-200 flex justify-between items-center">
+                <h2 id="modal-title" class="text-xl sm:text-2xl font-bold text-slate-900"></h2>
+                <button id="close-modal-btn" class="text-slate-500 hover:text-slate-800 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <div class="prose prose-slate max-w-none">
+                  <ol id="modal-steps" class="list-decimal list-inside space-y-3 text-slate-700"></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exerciseData = [
+            {
+                id: 1,
+                title: "Ejercicio 1: Data Classes para un `Libro`",
+                emoji: "📖",
+                snippet: "Usa `data class` para crear una clase concisa para almacenar datos de libros y prueba sus métodos autogenerados.",
+                steps: [
+                    "Crea una `data class` llamada `Libro` con las propiedades `titulo` (String), `autor` (String) y `isbn` (String).",
+                    "En `main`, crea dos instancias de `Libro` con los mismos datos.",
+                    "Compara las dos instancias usando `==` y comprueba que el resultado es `true`.",
+                    "Imprime una de las instancias. Observa el formato legible que proporciona el método `toString()` autogenerado.",
+                    "Crea una tercera instancia usando el método `copy()` de la primera, pero cambiando el `titulo`. Imprime esta nueva instancia para ver el cambio."
+                ]
+            },
+            {
+                id: 2,
+                title: "Ejercicio 2: Sealed Classes para `ResultadoAPI`",
+                emoji: "📡",
+                snippet: "Modela los posibles estados de una llamada a una API (Éxito, Error, Cargando) usando una jerarquía restringida.",
+                steps: [
+                    "Crea una `sealed class` llamada `ResultadoAPI`.",
+                    "Dentro de `ResultadoAPI`, crea tres subclases:",
+                    "Una `data class Exito` que contenga una propiedad `datos` (String).",
+                    "Una `data class Error` que contenga una propiedad `mensaje` (String).",
+                    "Un `object Cargando` que no contenga propiedades.",
+                    "Crea una función `procesarResultado(resultado: ResultadoAPI)` que use una expresión `when` para manejar todos los casos posibles sin necesidad de una rama `else`.",
+                    "En `main`, prueba la función `procesarResultado` con una instancia de cada subclase (`Exito`, `Error` y `Cargando`)."
+                ]
+            },
+            {
+                id: 3,
+                title: "Ejercicio 3: Enum Classes para `PrioridadTarea`",
+                emoji: "🚦",
+                snippet: "Define un conjunto fijo de prioridades para tareas, cada una con un valor de color asociado.",
+                steps: [
+                    "Crea una `enum class` llamada `PrioridadTarea` con tres constantes: `BAJA`, `MEDIA`, `ALTA`.",
+                    "Añade un constructor a la clase enum para que cada constante pueda tener una propiedad `colorHex` (String), por ejemplo: `BAJA(\"#00FF00\")`.",
+                    "Crea una función `obtenerColor(prioridad: PrioridadTarea): String` que devuelva el código de color de la prioridad dada.",
+                    "En `main`, itera sobre todos los valores de `PrioridadTarea` usando `PrioridadTarea.values()` y muestra el nombre de cada prioridad y su color."
+                ]
+            },
+            {
+                id: 4,
+                title: "Ejercicio 4: Singleton con `object` para `Logger`",
+                emoji: "✍️",
+                snippet: "Crea un `Logger` centralizado usando una declaración `object` para asegurar que solo exista una instancia en toda la app.",
+                steps: [
+                    "Crea un `object` llamado `Logger`.",
+                    "Dentro de `Logger`, añade una lista mutable de `String` para almacenar los mensajes de log: `private val logs = mutableListOf<String>()`.",
+                    "Crea una función `log(mensaje: String)` que añada el mensaje a la lista `logs` y lo imprima en la consola.",
+                    "Crea una función `mostrarLogs()` que imprima todos los mensajes almacenados en la lista.",
+                    "En `main`, llama a `Logger.log()` desde diferentes partes de tu código y al final llama a `Logger.mostrarLogs()` para ver el historial completo."
+                ]
+            },
+            {
+                id: 5,
+                title: "Ejercicio 5: Companion Object para Factory Method",
+                emoji: "🏭",
+                snippet: "Usa un `companion object` para crear instancias de una clase a través de un método de fábrica, ocultando el constructor.",
+                steps: [
+                    "Crea una clase `Usuario` con un **constructor primario privado** que acepte `email` (String).",
+                    "Dentro de la clase `Usuario`, crea un `companion object`.",
+                    "En el `companion object`, crea una función `crearDesdeEmail(email: String): Usuario?`.",
+                    "Esta función debe validar si el email contiene un \"@\". Si es válido, debe crear y devolver una nueva instancia de `Usuario`. Si no, debe devolver `null`.",
+                    "En `main`, intenta crear usuarios usando `Usuario.crearDesdeEmail()` con un email válido y uno inválido, y maneja el caso `null`."
+                ]
+            },
+            {
+                id: 6,
+                title: "Ejercicio 6: Funciones de Extensión para `Int`",
+                emoji: "➕",
+                snippet: "Añade una nueva funcionalidad a la clase `Int` sin heredar de ella.",
+                steps: [
+                    "Crea una función de extensión para la clase `Int` llamada `esPar()` que devuelva `true` si el número es par y `false` si es impar.",
+                    "Crea otra función de extensión para `Int` llamada `cuadrado()` que devuelva el número multiplicado por sí mismo.",
+                    "En `main`, declara dos números enteros, uno par y otro impar.",
+                    "Llama a tus nuevas funciones de extensión en estos números y muestra los resultados. Por ejemplo: `5.esPar()` y `10.cuadrado()`."
+                ]
+            },
+            {
+                id: 7,
+                title: "Ejercicio 7: Delegación de Interfaces con `by`",
+                emoji: "🖨️",
+                snippet: "Implementa múltiples interfaces en una clase delegando sus responsabilidades a otros objetos.",
+                steps: [
+                    "Crea una interfaz `Impresora` con una función `imprimir(documento: String)`.",
+                    "Crea una interfaz `Escaner` con una función `escanear(): String`.",
+                    "Crea una clase `ImpresoraLaser` que implemente `Impresora` y muestre un mensaje.",
+                    "Crea una clase `EscanerDeCamaPlana` que implemente `Escaner` y devuelva un texto escaneado.",
+                    "Crea una clase `Multifuncional` que acepte una `Impresora` y un `Escaner` en su constructor.",
+                    "Haz que `Multifuncional` implemente ambas interfaces **delegando** la implementación a los objetos pasados en el constructor, usando la palabra clave `by`.",
+                    "En `main`, crea una instancia de `Multifuncional` y prueba sus capacidades de impresión y escaneo."
+                ]
+            },
+            {
+                id: 8,
+                title: "Ejercicio 8: `Pair` y `Triple` para Devolver Valores",
+                emoji: "🎁",
+                snippet: "Aprende a devolver dos o tres valores desde una única función usando las clases `Pair` y `Triple`.",
+                steps: [
+                    "Crea una función `obtenerCoordenadas()` que no acepte parámetros y devuelva un `Pair<Int, Int>` representando una coordenada (X, Y).",
+                    "En `main`, llama a esta función y usa la **desestructuración** para asignar los resultados a dos variables separadas, `x` e `y`. Imprime las coordenadas.",
+                    "Crea una función `obtenerDatosUsuario()` que devuelva un `Triple<String, Int, Boolean>` representando un nombre de usuario, su edad y si está activo.",
+                    "En `main`, llama a esta función y desestructura el resultado en variables `nombre`, `edad`, y `estaActivo`.",
+                    "Imprime los datos del usuario de forma legible."
+                ]
+            },
+            {
+                id: 9,
+                title: "Ejercicio 9: Clases Genéricas con `Caja<T>`",
+                emoji: "💎",
+                snippet: "Crea una clase que pueda contener cualquier tipo de dato de forma segura usando genéricos.",
+                steps: [
+                    "Crea una clase genérica `Caja<T>` que tenga una propiedad `contenido` de tipo `T` en su constructor.",
+                    "Añade una función `obtenerContenido(): T` que devuelva el contenido.",
+                    "Añade una función `estaVacia(): Boolean` que devuelva `true` si el contenido es `null` (para esto, el tipo genérico debe ser nulable: `Caja<T?>`).",
+                    "En `main`, crea una `Caja` para un `String` y otra para un `Int`.",
+                    "Muestra el contenido de cada caja y verifica si están vacías."
+                ]
+            },
+            {
+                id: 10,
+                title: "Ejercicio 10: Integrador - Sistema de Archivos",
+                emoji: "📂",
+                snippet: "Combina clases selladas, objetos y funciones de extensión para modelar un sistema de archivos simple.",
+                steps: [
+                    "Crea una `sealed class ElementoSistema` con una propiedad `nombre`.",
+                    "Define dos subclases de `ElementoSistema`: `Archivo` (con propiedad `tamañoKB`) y `Directorio` (con una `MutableList<ElementoSistema>` para sus contenidos).",
+                    "Crea un `object GestorArchivos` con funciones para `crearArchivo` y `crearDirectorio`.",
+                    "Crea una **función de extensión** para `Directorio` llamada `calcularTamañoTotal(): Int` que sume recursivamente el tamaño de todos los archivos que contiene.",
+                    "En `main`, usa el `GestorArchivos` para construir una estructura de directorios y archivos, y luego llama a tu función de extensión en el directorio raíz para obtener el tamaño total."
+                ]
+            }
+        ];
+
+        const exerciseGrid = document.getElementById('exercise-grid');
+        const modal = document.getElementById('exercise-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        function createExerciseCard(exercise) {
+            const card = document.createElement('div');
+            card.className = 'exercise-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col';
+            card.dataset.id = exercise.id;
+            
+            card.innerHTML = `
+                <div class="text-4xl mb-4">${exercise.emoji}</div>
+                <h3 class="font-bold text-lg text-slate-800 mb-2 flex-grow">${exercise.title}</h3>
+                <p class="text-slate-500 text-sm mt-auto">${exercise.snippet}</p>
+            `;
+            card.addEventListener('click', () => openModal(exercise));
+            return card;
+        }
+
+        function displayExercises() {
+            exerciseGrid.innerHTML = '';
+            exerciseData.forEach(exercise => {
+                const card = createExerciseCard(exercise);
+                exerciseGrid.appendChild(card);
+            });
+        }
+        
+        function openModal(exercise) {
+            document.getElementById('modal-title').textContent = exercise.title;
+            
+            const stepsList = document.getElementById('modal-steps');
+            stepsList.innerHTML = '';
+            exercise.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerHTML = step;
+                stepsList.appendChild(li);
+            });
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            void modal.offsetWidth;
+
+            modal.classList.remove('opacity-0');
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                 modalContent.classList.remove('scale-95');
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.classList.add('scale-95');
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300); 
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        displayExercises();
+    </script>
+</body>
+</html>

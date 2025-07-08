@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Kotlin: Clases, Herencia y Polimorfismo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Calm Slate -->
+    <!-- Application Structure Plan: A single-page dashboard displaying 10 OOP exercises as interactive cards in a responsive grid. Clicking a card opens a modal with the detailed steps for that exercise. This structure allows for a clean overview of all exercises, while the modal provides a focused view for tackling each problem individually without leaving the page. -->
+    <!-- Visualization & Content Choices: The source document is text-based (programming exercises). Each exercise is presented as a card for scannability. The detailed, step-by-step instructions are shown in a modal pop-up, using an ordered list for clarity. The interaction is a simple card-to-modal flow to keep the interface uncluttered and user-friendly. No data visualizations are needed. No SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-2">Ejercicios de POO en Kotlin</h1>
+            <p class="text-md md:text-lg text-slate-600 max-w-3xl mx-auto">Haz clic en una tarjeta para ver los detalles del ejercicio. ¡Practica tus habilidades de clases, herencia y polimorfismo!</p>
+        </header>
+
+        <main id="exercise-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Exercise cards will be dynamically inserted here -->
+        </main>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="exercise-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop bg-black bg-opacity-50 hidden opacity-0">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="sticky top-0 bg-white/80 backdrop-blur-sm p-4 sm:p-6 border-b border-slate-200 flex justify-between items-center">
+                <h2 id="modal-title" class="text-xl sm:text-2xl font-bold text-slate-900"></h2>
+                <button id="close-modal-btn" class="text-slate-500 hover:text-slate-800 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <div class="prose prose-slate max-w-none">
+                  <ol id="modal-steps" class="list-decimal list-inside space-y-3 text-slate-700"></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exerciseData = [
+            {
+                id: 1,
+                title: "Ejercicio 1: Figuras Geométricas Básicas",
+                emoji: "�",
+                snippet: "Crea una clase base `FiguraGeometrica` y dos clases hijas que hereden de ella.",
+                steps: [
+                    "Crea una clase base (open class) `FiguraGeometrica`. En su **constructor primario**, debe aceptar una propiedad `nombre` (String).",
+                    "Dentro de la clase `FiguraGeometrica`, añade una función `imprimirNombre()` que imprima \"Soy una figura: [nombre]\".",
+                    "Crea dos clases hijas: `Circulo` y `Cuadrado`, que hereden de `FiguraGeometrica`.",
+                    "El **constructor primario** de `Circulo` debe aceptar un `radio` (Double) además del `nombre`.",
+                    "El **constructor primario** de `Cuadrado` debe aceptar un `lado` (Double) además del `nombre`.",
+                    "En tu función `main`, crea una instancia de `Circulo` y una de `Cuadrado` y llama a su método `imprimirNombre()`."
+                ]
+            },
+            {
+                id: 2,
+                title: "Ejercicio 2: Polimorfismo con Áreas",
+                emoji: "🧮",
+                snippet: "Añade un método `calcularArea` y sobrescríbelo en las clases hijas para demostrar polimorfismo.",
+                steps: [
+                    "Modifica la clase `FiguraGeometrica` del ejercicio anterior. Añade una función `open fun calcularArea(): Double` que devuelva `0.0`.",
+                    "En las clases `Circulo` y `Cuadrado`, **sobrescribe (override)** el método `calcularArea()` para que calcule y devuelva el área correcta para cada figura (Círculo: π * radio², Cuadrado: lado * lado).",
+                    "En `main`, crea una **lista** de tipo `FiguraGeometrica` y añade tus instancias de `Circulo` y `Cuadrado`.",
+                    "**Itera sobre la lista** y, para cada figura, imprime su nombre y su área calculada. Observa cómo se llama al método `calcularArea()` correcto para cada objeto, demostrando el polimorfismo."
+                ]
+            },
+            {
+                id: 3,
+                title: "Ejercicio 3: Jerarquía de Empleados con `init`",
+                emoji: "🏢",
+                snippet: "Modela una jerarquía de empleados usando bloques `init` y sobrescribiendo métodos.",
+                steps: [
+                    "Crea una clase base `Empleado` con un **constructor primario** que acepte `nombre` (String), `edad` (Int) y `salarioBase` (Double).",
+                    "Dentro de la clase `Empleado`, usa un **bloque `init`** para imprimir un mensaje de bienvenida, por ejemplo: \"Se ha registrado un nuevo empleado: [nombre]\".",
+                    "Añade a `Empleado` una función `open fun calcularSalario(): Double` que simplemente devuelva `salarioBase`.",
+                    "Crea una clase hija `Gerente` que herede de `Empleado`. Su constructor primario debe aceptar también una propiedad `bono` (Double).",
+                    "**Sobrescribe** `calcularSalario()` en `Gerente` para que devuelva la suma de `salarioBase` y `bono`.",
+                    "Crea una clase hija `Desarrollador` que herede de `Empleado`. Añade una propiedad `lenguaje` (String) en su constructor.",
+                    "En `main`, crea un `Gerente` y un `Desarrollador`, y muestra el salario calculado para cada uno."
+                ]
+            },
+            {
+                id: 4,
+                title: "Ejercicio 4: Constructores Secundarios para `Producto`",
+                emoji: "📦",
+                snippet: "Practica el uso de constructores primarios y secundarios, junto con validación en `init`.",
+                steps: [
+                    "Crea una clase `Producto` con un **constructor primario** que tome `codigo` (String) y `precio` (Double).",
+                    "Dentro de la clase, utiliza un **bloque `init`** para validar que el `precio` no sea negativo. Si lo es, lanza una excepción (`IllegalArgumentException`).",
+                    "Crea un **constructor secundario** que solo acepte el `codigo`. Este constructor debe delegar al primario, asignando un precio por defecto de `9.99`.",
+                    "Crea otro **constructor secundario** que no acepte parámetros. Debe delegar al constructor primario asignando un `codigo` \"GEN-001\" y un `precio` de `0.99`.",
+                    "En `main`, crea instancias de `Producto` usando los tres constructores y muestra sus detalles."
+                ]
+            },
+            {
+                id: 5,
+                title: "Ejercicio 5: Clases Abstractas - `Animal`",
+                emoji: "🐾",
+                snippet: "Define una jerarquía con una clase base abstracta y métodos abstractos.",
+                steps: [
+                    "Crea una **clase abstracta (abstract class) `Animal`** con una propiedad `nombre` (String) en su constructor.",
+                    "Dentro de `Animal`, define dos métodos abstractos: `abstract fun hacerSonido()` y `abstract fun moverse()`.",
+                    "Crea tres clases concretas que hereden de `Animal`: `Perro`, `Gato` y `Pajaro`.",
+                    "**Implementa** los métodos `hacerSonido()` y `moverse()` en cada clase hija con un comportamiento apropiado (p. ej., el perro ladra y corre, el pájaro pía y vuela).",
+                    "Crea una lista de `Animal` que contenga instancias de tus tres clases.",
+                    "Recorre la lista y llama a `hacerSonido()` y `moverse()` para cada animal, demostrando el polimorfismo."
+                ]
+            },
+            {
+                id: 6,
+                title: "Ejercicio 6: Herencia y Llamadas a `super`",
+                emoji: "🚗",
+                snippet: "Sobrescribe un método y llama a la implementación de la clase padre desde la clase hija.",
+                steps: [
+                    "Crea una clase base `Vehiculo` con un método `open fun describir()` que imprima \"Este es un vehículo genérico.\"",
+                    "Crea una clase hija `Coche` que herede de `Vehiculo`.",
+                    "Sobrescribe el método `describir()` en `Coche`. Dentro de este método, primero **llama al método de la clase padre** (`super.describir()`) y luego añade una nueva línea que imprima \"Más específicamente, un coche de 4 ruedas.\""
+                ]
+            },
+            {
+                id: 7,
+                title: "Ejercicio 7: Polimorfismo y Smart Casting",
+                emoji: "🧠",
+                snippet: "Utiliza `when` y el smart casting de Kotlin para manejar diferentes subtipos.",
+                steps: [
+                    "Usando la jerarquía de `Animal` del ejercicio 5, crea una función fuera de las clases llamada `describirComportamiento(animal: Animal)`.",
+                    "Dentro de esta función, utiliza una sentencia `when` para comprobar el tipo de `animal`.",
+                    "Si `animal` **es un** `Pajaro`, imprime \"Este animal vuela alto.\" (Kotlin hará un *smart cast* y sabrá que es un `Pajaro`).",
+                    "Si `animal` **es un** `Perro`, imprime \"Este animal es el mejor amigo del hombre.\"",
+                    "Para cualquier otro tipo de `Animal`, imprime \"Este animal tiene un comportamiento interesante.\"",
+                    "Llama a esta función desde `main` con tus instancias de `Perro`, `Gato` y `Pajaro`."
+                ]
+            },
+            {
+                id: 8,
+                title: "Ejercicio 8: Jerarquía de Publicaciones",
+                emoji: "📚",
+                snippet: "Modela una jerarquía simple para `Publicacion`, `Libro` y `ArticuloDeRevista`.",
+                steps: [
+                    "Crea una clase base `Publicacion` con propiedades `titulo` y `autor`.",
+                    "Crea una clase `Libro` que herede de `Publicacion` y añada una propiedad `numeroPaginas`.",
+                    "Crea una clase `ArticuloDeRevista` que también herede de `Publicacion` y añada una propiedad `nombreRevista`.",
+                    "En `main`, demuestra que puedes crear un `Libro` y un `ArticuloDeRevista`, y que ambos tienen acceso a las propiedades `titulo` y `autor` de la clase base."
+                ]
+            },
+            {
+                id: 9,
+                title: "Ejercicio 9: Constructores y Validación en Cadena",
+                emoji: "🔐",
+                snippet: "Crea una clase con constructores primarios y secundarios que se validen entre sí.",
+                steps: [
+                    "Crea una clase `Usuario` con un **constructor primario** que tome `username` (String) y `email` (String).",
+                    "En el **bloque `init`** del constructor primario, valida que el `username` no esté vacío.",
+                    "Crea un **constructor secundario** que solo acepte `username`. Este constructor debe validar que el email generado por defecto (`[username]@empresa.com`) sea un email válido (puedes hacer una validación simple, como verificar que contenga \"@\"). Luego, debe delegar al constructor primario.",
+                    "Prueba creando usuarios con ambos constructores."
+                ]
+            },
+            {
+                id: 10,
+                title: "Ejercicio 10: Sistema de Notificaciones Polimórfico",
+                emoji: "🔔",
+                snippet: "Diseña un sistema donde diferentes tipos de notificaciones se pueden enviar a través de una interfaz común.",
+                steps: [
+                    "Crea una clase base `Notificacion` con un método `open fun enviar()` que imprima \"Enviando notificación genérica...\".",
+                    "Crea tres clases hijas: `NotificacionEmail`, `NotificacionSMS` y `NotificacionPush` con propiedades y métodos `enviar()` sobrescritos y apropiados.",
+                    "En `main`, crea una función `enviarTodas(notificaciones: List<Notificacion>)` que itere sobre una lista de notificaciones y llame al método `enviar()` de cada una.",
+                    "Crea una lista mixta con diferentes tipos de notificaciones y pásala a tu función `enviarTodas`."
+                ]
+            }
+        ];
+
+        const exerciseGrid = document.getElementById('exercise-grid');
+        const modal = document.getElementById('exercise-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        function createExerciseCard(exercise) {
+            const card = document.createElement('div');
+            card.className = 'exercise-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col';
+            card.dataset.id = exercise.id;
+            
+            card.innerHTML = `
+                <div class="text-4xl mb-4">${exercise.emoji}</div>
+                <h3 class="font-bold text-lg text-slate-800 mb-2 flex-grow">${exercise.title}</h3>
+                <p class="text-slate-500 text-sm mt-auto">${exercise.snippet}</p>
+            `;
+            card.addEventListener('click', () => openModal(exercise));
+            return card;
+        }
+
+        function displayExercises() {
+            exerciseGrid.innerHTML = '';
+            exerciseData.forEach(exercise => {
+                const card = createExerciseCard(exercise);
+                exerciseGrid.appendChild(card);
+            });
+        }
+        
+        function openModal(exercise) {
+            document.getElementById('modal-title').textContent = exercise.title;
+            
+            const stepsList = document.getElementById('modal-steps');
+            stepsList.innerHTML = '';
+            exercise.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerHTML = step; // Use innerHTML to render potential <strong> tags etc.
+                stepsList.appendChild(li);
+            });
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            void modal.offsetWidth;
+
+            modal.classList.remove('opacity-0');
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                 modalContent.classList.remove('scale-95');
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.classList.add('scale-95');
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300); 
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        displayExercises();
+    </script>
+</body>
+</html>
