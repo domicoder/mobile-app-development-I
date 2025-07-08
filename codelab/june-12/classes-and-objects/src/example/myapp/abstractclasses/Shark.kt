@@ -1,6 +1,6 @@
 package example.myapp.abstractclasses
 
-class Shark: AquariumFish(), FishAction {
+class Shark: FishAction, FishColor {
     override val color = "grey"
     override fun eat() {
         println("hunt and eat fish")

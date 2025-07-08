@@ -1,8 +1,5 @@
 package example.myapp.abstractclasses
 
-class Plecostomus: AquariumFish(), FishAction {
-    override val color = "gold"
-    override fun eat() {
-        println("eat algae")
-    }
-}
+class Plecostomus(fishColor: FishColor = GoldColor):
+    FishAction by PrintingFishAction("eat algae"),
+    FishColor by GoldColor

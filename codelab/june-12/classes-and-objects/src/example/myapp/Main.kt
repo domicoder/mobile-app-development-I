@@ -2,6 +2,7 @@ package example.myapp
 
 import example.myapp.abstractclasses.Plecostomus
 import example.myapp.abstractclasses.Shark
+import example.myapp.decor.makeDecorations
 
 fun buildAquarium() {
     val myAquarium = Aquarium()
@@ -37,4 +38,5 @@ fun makeFish() {
 fun main() {
     buildAquarium()
     makeFish()
+    makeDecorations()
 }
