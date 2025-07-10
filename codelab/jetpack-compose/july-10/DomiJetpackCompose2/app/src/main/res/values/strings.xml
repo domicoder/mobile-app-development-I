@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Domi JetpackCompose</string>
+    <string name="exercise_4_article">Jetpack Compose es el kit de herramientas moderno recomendado por Android para construir interfaces de usuario nativas. Simplifica y acelera el desarrollo de interfaces de usuario en Android, utilizando un enfoque declarativo con Kotlin.</string>
+    <string name="article_content">El color verde, en su esencia, evoca imágenes de la naturaleza, la frescura y la vitalidad. Es un color que se asocia con la esperanza, el equilibrio y la armonía. Además de su conexión con la naturaleza, el verde también se relaciona con la salud, la renovación y la tranquilidad. En la psicología del color, el verde se considera un color relajante y tranquilizador, que puede ayudar a reducir el estrés y promover la sensación de bienestar.
+</string>
+</resources>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Ejercicios de Iniciación a Jetpack Compose</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Calm Slate -->
+    <!-- Application Structure Plan: A single-page dashboard displaying 10 Jetpack Compose exercises as interactive cards in a responsive grid. Clicking a card opens a modal with the detailed steps for that exercise. This structure provides a clean overview of all exercises, while the modal offers a focused view for tackling each problem individually without leaving the main page. -->
+    <!-- Visualization & Content Choices: The source document is text-based (programming exercises). Each exercise is encapsulated in a card with a title, emoji, and snippet for quick scanning. The detailed, step-by-step instructions are presented in an ordered list within a modal for clarity. The primary interaction is the card-to-modal flow, which is effective for this type of instructional content. No data visualizations are needed. No SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-2">10 Ejercicios de Iniciación a Jetpack Compose</h1>
+            <p class="text-md md:text-lg text-slate-600 max-w-3xl mx-auto">Haz clic en una tarjeta para ver los detalles del ejercicio y empezar a practicar con los componentes básicos de Compose.</p>
+        </header>
+
+        <main id="exercise-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Exercise cards will be dynamically inserted here -->
+        </main>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="exercise-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop bg-black bg-opacity-50 hidden opacity-0">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="sticky top-0 bg-white/80 backdrop-blur-sm p-4 sm:p-6 border-b border-slate-200 flex justify-between items-center">
+                <h2 id="modal-title" class="text-xl sm:text-2xl font-bold text-slate-900"></h2>
+                <button id="close-modal-btn" class="text-slate-500 hover:text-slate-800 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-4 sm:p-6">
+                 <div class="mb-4">
+                    <h3 class="font-semibold text-lg text-slate-700 mb-2">🎯 Objetivo</h3>
+                    <p id="modal-objective" class="text-slate-600"></p>
+                </div>
+                <div class="prose prose-slate max-w-none">
+                  <h3 class="font-semibold text-lg text-slate-700 mb-2">📋 Pasos</h3>
+                  <ol id="modal-steps" class="list-decimal list-inside space-y-3 text-slate-700"></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exerciseData = [
+            {
+                id: 1,
+                title: "Ejercicio 1: Tu Primer Composable 'Hola Mundo'",
+                emoji: "👋",
+                objective: "Crear tu primera función Composable y mostrar un texto simple en la pantalla.",
+                steps: [
+                    "Crea una nueva función Composable llamada `MiPrimerComposable`.",
+                    "Dentro de esta función, utiliza el Composable `Text` para mostrar el mensaje: \"¡Hola, Jetpack Compose!\".",
+                    "Llama a tu nueva función `MiPrimerComposable` desde el bloque `setContent` de tu actividad principal para que se muestre en la pantalla."
+                ]
+            },
+            {
+                id: 2,
+                title: "Ejercicio 2: Tarjeta de Presentación Personal",
+                emoji: "🧑‍💻",
+                objective: "Utilizar `Column` para organizar varios `Text` de forma vertical y aplicar estilos básicos.",
+                steps: [
+                    "Crea un Composable llamado `TarjetaDePresentacion`.",
+                    "Usa un `Column` para apilar tres `Text` uno encima del otro: tu nombre, tu título (p. ej., \"Desarrollador Android Jr.\") y tu correo electrónico.",
+                    "Aplica estilos diferentes a cada `Text`:",
+                    "Haz que tu nombre sea más grande y esté en negrita (`fontSize`, `fontWeight`).",
+                    "Cambia el color del texto de tu título a un gris (`color`).",
+                    "Añade un `Modifier.padding()` al `Column` para que no esté pegado a los bordes de la pantalla."
+                ]
+            },
+            {
+                id: 3,
+                title: "Ejercicio 3: Fila de Iconos de Redes Sociales",
+                emoji: "🌐",
+                objective: "Utilizar `Row` para organizar elementos de forma horizontal y controlar su espaciado.",
+                steps: [
+                    "Crea un Composable llamado `IconosSociales`.",
+                    "Dentro de un `Row`, coloca tres `Text` Composable. Cada uno puede contener un emoji que represente una red social (p. ej., \"🐦\", \"💼\", \"📸\").",
+                    "Utiliza el parámetro `horizontalArrangement` del `Row` para separar los iconos de manera uniforme. Prueba con `Arrangement.SpaceEvenly`.",
+                    "Aumenta el `fontSize` de los emojis para que se vean más grandes."
+                ]
+            },
+            {
+                id: 4,
+                title: "Ejercicio 4: Artículo de Blog Sencillo",
+                emoji: "📄",
+                objective: "Combinar `Column` y `Text` para maquetar un artículo simple y usar `Spacer` para crear espacio vertical.",
+                steps: [
+                    "Crea un Composable llamado `ArticuloSimple`.",
+                    "Usa un `Column` como contenedor principal.",
+                    "Dentro del `Column`, añade:",
+                    "Un `Text` para el título del artículo (p. ej., \"Aprendiendo Jetpack Compose\"). Hazlo grande y en negrita.",
+                    "Un `Spacer` con un `Modifier.height()` para crear un espacio vertical de 16.dp.",
+                    "Un `Text` con un párrafo largo de texto simulado (puedes usar `stringResource` o un texto largo directamente).",
+                    "Asegúrate de que el `Column` tenga un `padding` general."
+                ]
+            },
+            {
+                id: 5,
+                title: "Ejercicio 5: Composición de Fila y Columna",
+                emoji: "🧩",
+                objective: "Anidar un `Row` dentro de un `Column` para crear un diseño de perfil básico.",
+                steps: [
+                    "Crea un Composable llamado `PerfilDeUsuario`.",
+                    "Usa un `Column` como el contenedor principal.",
+                    "Dentro del `Column`, crea un `Row`. Este `Row` contendrá:",
+                    "Un `Text` con un emoji de avatar (p. ej., \"🧑‍💻\"). Auméntale el tamaño.",
+                    "Un `Spacer` con un `Modifier.width()` para separarlo del texto.",
+                    "Un `Column` más pequeño que contenga dos `Text`: tu nombre de usuario y tu estado (p. ej., \"En línea\").",
+                    "Utiliza `verticalAlignment = Alignment.CenterVertically` en el `Row` principal para alinear el avatar con los textos."
+                ]
+            },
+            {
+                id: 6,
+                title: "Ejercicio 6: Cuadrícula de 2x2",
+                emoji: "▦",
+                objective: "Crear una cuadrícula simple usando `Row`s y `Column`s anidados, y el modificador `weight`.",
+                steps: [
+                    "Crea un Composable llamado `CuadriculaSimple`.",
+                    "Usa un `Column` principal.",
+                    "Dentro de este, añade dos `Row`.",
+                    "En cada `Row`, añade dos `Box` (o `Surface` con color).",
+                    "Aplica un `Modifier.weight(1f)` a cada `Box` dentro de los `Row`s para que ocupen el mismo espacio horizontal.",
+                    "Aplica un `Modifier.aspectRatio(1f)` a cada `Box` para que sean cuadrados. Dales colores de fondo diferentes para distinguirlos."
+                ]
+            },
+            {
+                id: 7,
+                title: "Ejercicio 7: Etiqueta de Producto",
+                emoji: "🏷️",
+                objective: "Diseñar una etiqueta de producto usando `Row` para alinear texto a la izquierda y a la derecha.",
+                steps: [
+                    "Crea un Composable llamado `ItemDeRecibo`.",
+                    "Usa un `Row` que ocupe todo el ancho disponible (`modifier = Modifier.fillMaxWidth()`).",
+                    "Dentro del `Row`, añade un `Text` para el nombre del producto (p. ej., \"Café Americano\").",
+                    "Añade un `Spacer` con `Modifier.weight(1f)`. Esto empujará al siguiente elemento hacia el final.",
+                    "Añade un segundo `Text` para el precio (p. ej., \"$2.50\").",
+                    "En `main`, crea una `Column` y pon varios `ItemDeRecibo` para simular un recibo."
+                ]
+            },
+            {
+                id: 8,
+                title: "Ejercicio 8: Barra de Progreso Simple",
+                emoji: "📊",
+                objective: "Crear una barra de progreso visual usando `Row` y `Box`.",
+                steps: [
+                    "Crea un Composable llamado `BarraDeProgreso` que acepte un parámetro `progreso` (un `Float` entre 0.0 y 1.0).",
+                    "Usa un `Box` con un color de fondo gris claro para representar el 100% de la barra (`modifier = Modifier.fillMaxWidth().height(16.dp)`).",
+                    "Dentro de ese `Box`, añade otro `Box` con un color de fondo azul.",
+                    "El `modifier` del `Box` azul debe usar `fillMaxWidth(progreso)` para que su ancho represente el progreso actual.",
+                    "Prueba tu Composable con diferentes valores de progreso."
+                ]
+            },
+            {
+                id: 9,
+                title: "Ejercicio 9: Tarjeta de Noticia",
+                emoji: "📰",
+                objective: "Maquetar una tarjeta de noticia más compleja combinando todos los elementos anteriores.",
+                steps: [
+                    "Crea un Composable `TarjetaDeNoticia`.",
+                    "Usa un `Column` principal con un `padding` y un borde (`border`).",
+                    "Dentro del `Column`:",
+                    "Añade un `Box` de color para simular una imagen en la parte superior.",
+                    "Añade un `Text` para el titular de la noticia (grande y en negrita).",
+                    "Añade un `Row` para los metadatos. Este `Row` debe contener:",
+                    "Un `Text` para el nombre del autor.",
+                    "Un `Spacer` con `weight(1f)`.",
+                    "Un `Text` para la fecha de publicación.",
+                    "Añade un `Text` con un resumen corto de la noticia."
+                ]
+            },
+            {
+                id: 10,
+                title: "Ejercicio 10: Pantalla de 'Login' Sencilla",
+                emoji: "🔐",
+                objective: "Crear una maqueta de una pantalla de inicio de sesión simple.",
+                steps: [
+                    "Crea un Composable `PantallaLogin`.",
+                    "Usa un `Column` principal con `verticalArrangement = Arrangement.Center` y `horizontalAlignment = Alignment.CenterHorizontally`, y que ocupe toda la pantalla (`modifier = Modifier.fillMaxSize()`).",
+                    "Dentro del `Column`, añade:",
+                    "Un `Text` con el título \"Bienvenido\".",
+                    "Un `Spacer` para crear espacio.",
+                    "Un `Text` que simule un campo de texto para \"Usuario\" (puedes usar un `Box` con un borde).",
+                    "Otro `Spacer`.",
+                    "Un `Text` que simule un campo de texto para \"Contraseña\".",
+                    "Un último `Spacer` grande.",
+                    "Un `Text` que simule un botón de \"Iniciar Sesión\" (puedes darle un fondo de color y padding)."
+                ]
+            }
+        ];
+
+        const exerciseGrid = document.getElementById('exercise-grid');
+        const modal = document.getElementById('exercise-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        function createExerciseCard(exercise) {
+            const card = document.createElement('div');
+            card.className = 'exercise-card bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col';
+            card.dataset.id = exercise.id;
+            
+            card.innerHTML = `
+                <div class="text-4xl mb-4">${exercise.emoji}</div>
+                <h3 class="font-bold text-lg text-slate-800 mb-2 flex-grow">${exercise.title}</h3>
+                <p class="text-slate-500 text-sm mt-auto">${exercise.objective}</p>
+            `;
+            card.addEventListener('click', () => openModal(exercise));
+            return card;
+        }
+
+        function displayExercises() {
+            exerciseGrid.innerHTML = '';
+            exerciseData.forEach(exercise => {
+                const card = createExerciseCard(exercise);
+                exerciseGrid.appendChild(card);
+            });
+        }
+        
+        function openModal(exercise) {
+            document.getElementById('modal-title').textContent = exercise.title;
+            document.getElementById('modal-objective').textContent = exercise.objective;
+            
+            const stepsList = document.getElementById('modal-steps');
+            stepsList.innerHTML = '';
+            exercise.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerHTML = step;
+                stepsList.appendChild(li);
+            });
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            void modal.offsetWidth;
+
+            modal.classList.remove('opacity-0');
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                 modalContent.classList.remove('scale-95');
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.classList.add('scale-95');
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300); 
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        displayExercises();
+    </script>
+</body>
+</html>
