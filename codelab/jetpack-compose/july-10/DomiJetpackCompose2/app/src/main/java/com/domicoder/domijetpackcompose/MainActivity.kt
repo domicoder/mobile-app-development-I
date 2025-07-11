@@ -1,5 +1,7 @@
 package com.domicoder.domijetpackcompose
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,20 +21,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.util.rangeTo
 import com.domicoder.domijetpackcompose.ui.theme.DomiJetpackComposeTheme
 
 // This file is created for study and practice purposes.
@@ -43,7 +46,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DomiJetpackComposeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize().padding(16.dp)) { innerPadding ->
+                Scaffold(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)) { innerPadding ->
                     Column(modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize()
@@ -54,22 +59,49 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(8.dp)
                         ) // Ejercicio 1
                         TarjetaDePresentacion(modifier = Modifier.padding(8.dp)) // Ejercicio 2
-                        IconosSociales(modifier = Modifier.padding(8.dp)) // Ejercicio 3
-                        ArticuloSimple(modifier = Modifier.padding(8.dp)) // Ejercicio 4
-                        PerfilDeUsuario(modifier = Modifier.padding(8.dp)) // Ejercicio 5
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.End
+                        ) {
+                            IconosSociales() // Ejercicio 3
+                        }
+                        ArticuloSimple() // Ejercicio 4
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            PerfilDeUsuario(modifier = Modifier.padding(8.dp)) // Ejercicio 5
+                        }
                         CuadriculaSimple(modifier = Modifier.padding(8.dp)) // Ejercicio 6
                         Column(modifier = Modifier.padding(8.dp)) { // Ejercicio 7
                             ItemDeRecibo()
                             ItemDeRecibo()
                             ItemDeRecibo()
                         }
-                        Column(modifier = Modifier.padding(8.dp)) { // Ejercicio 8
-                            BarraDeProgreso(0.2f) // Ejercicio 8
-                            BarraDeProgreso(0.3f) // Ejercicio 8
-                            BarraDeProgreso(0.4f) // Ejercicio 8
+                        Column(
+                            modifier = Modifier
+                                .padding(8.dp)
+
+                        ) { // Ejercicio 8
+                            BarraDeProgreso(0.2f, Modifier.padding(bottom = 8.dp)) // Ejercicio 8
+                            BarraDeProgreso(0.6f, Modifier.padding(bottom = 8.dp)) // Ejercicio 8
+                            BarraDeProgreso(0.4f, Modifier.padding(bottom = 8.dp)) // Ejercicio 8
                         }
-                        TarjetaDeNoticia(title = "Color verde", authorName = "Unknown", publishedDate = "10/07/2025", articleContent = stringResource(R.string.article_content),)
-                        PantallaLogin()
+                        Column(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .border(2.dp, Color.Black)
+                        ) {
+                            TarjetaDeNoticia(title = "Color verde", authorName = "Unknown", publishedDate = "10/07/2025", articleContent = stringResource(R.string.article_content))
+                        }
+                        Column (
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            GoToLogin(LocalContext.current)
+                        }
                     }
                 }
             }
@@ -89,22 +121,22 @@ fun MiPrimerComposable(message: String, modifier: Modifier = Modifier) {
 //Ejercicio 2
 @Composable
 fun TarjetaDePresentacion(modifier: Modifier = Modifier) {
-    Column {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.End,
+    ) {
         Text(
             text = "Yander Sanchez",
-            modifier = modifier,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
         )
         Text(
             text = "Fullstack Developer",
-            modifier = modifier,
             fontSize = 12.sp,
             color = Color.Gray
         )
         Text(
             text = "sanchezyander@gmail.com",
-            modifier = modifier,
             fontSize = 12.sp,
             color = Color.Gray
         )
@@ -113,46 +145,47 @@ fun TarjetaDePresentacion(modifier: Modifier = Modifier) {
 
 //Ejercicio 3
 @Composable
-fun IconosSociales(modifier: Modifier = Modifier) {
-    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+fun IconosSociales() {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
         Text(
             text = "\uD83D\uDC26",
             fontSize = 16.sp,
-            modifier = modifier
+            modifier = Modifier
+                .padding(end  = 8.dp)
         )
         Text(
             text = "\uD83D\uDCBC",
             fontSize = 16.sp,
-            modifier = modifier
+            modifier = Modifier
+                .padding(end  = 8.dp)
         )
         Text(
             text = "\uD83D\uDCF8",
             fontSize = 16.sp,
-            modifier = modifier
         )
     }
 }
 
 //Ejercicio 4
 @Composable
-fun ArticuloSimple(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(0.dp)) {
+fun ArticuloSimple() {
+    Column {
         Text(
             text = "Aprendiendo Jetpack Compose",
-            modifier = modifier,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.exercise_4_article),
-            modifier = modifier,
             fontSize = 12.sp,
-            color = Color.Gray
+            color = Color.Gray,
+            textAlign = TextAlign.Justify,
         )
     }
 }
-
 
 //Ejercicio 5
 @Composable
@@ -190,7 +223,7 @@ fun CuadriculaSimple(modifier: Modifier = Modifier) {
 //                    .height(50.dp)
                     .weight(1f)
                     .aspectRatio(1f)
-                    .background(MaterialTheme.colorScheme.error)
+                    .background(Color(0XFFbd2d30))
             )
             Box(
                 modifier = Modifier
@@ -198,8 +231,7 @@ fun CuadriculaSimple(modifier: Modifier = Modifier) {
 //                    .height(50.dp)
                     .weight(1f)
                     .aspectRatio(1f)
-                    .background(
-                        color = Color.Blue
+                    .background(Color(0XFF0f2d5e)
                     )
             )
         }
@@ -210,9 +242,7 @@ fun CuadriculaSimple(modifier: Modifier = Modifier) {
 //                    .height(50.dp)
                     .weight(1f)
                     .aspectRatio(1f)
-                    .background(
-                        color = Color.Blue
-                    )
+                    .background(Color(0XFF0f2d5e))
             )
             Box(
                 modifier = Modifier
@@ -221,13 +251,12 @@ fun CuadriculaSimple(modifier: Modifier = Modifier) {
                     .weight(1f)
                     .aspectRatio(1f)
 
-                    .background(MaterialTheme.colorScheme.error)
+                    .background(Color(0XFFbd2d30))
 
             )
         }
     }
 }
-
 
 //Ejercicio 7
 @Composable
@@ -257,19 +286,27 @@ fun ItemDeRecibo(modifier: Modifier = Modifier) {
 fun BarraDeProgreso(progreso: Float, modifier: Modifier = Modifier) {
     require(progreso in 0.0f..1.0f) { "'progreso' must be between 0.0 and 1.0" }
     Box(
-        modifier = Modifier.fillMaxWidth().height(16.dp).background(Color.LightGray)
+        modifier = modifier
+            .fillMaxWidth()
+            .height(16.dp)
+            .background(Color.LightGray)
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth(progreso).height(16.dp).background(Color.Blue)
+            modifier = Modifier
+                .fillMaxWidth(progreso)
+                .height(16.dp)
+                .background(Color.Blue)
         )
     }
 }
 
-
 //Ejercicio 9
 @Composable
 fun TarjetaDeNoticia(title: String, authorName: String, publishedDate: String, articleContent: String, modifier: Modifier = Modifier) {
-    Column(modifier = Modifier.padding(10.dp).border(2.dp, Color.Black)) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
         Box(
             modifier = Modifier
                 .height(80.dp)
@@ -283,6 +320,7 @@ fun TarjetaDeNoticia(title: String, authorName: String, publishedDate: String, a
             modifier = modifier,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
+            textAlign = TextAlign.Justify,
         )
         Row {
             Text(
@@ -307,36 +345,17 @@ fun TarjetaDeNoticia(title: String, authorName: String, publishedDate: String, a
 
 //Ejercicio 10
 @Composable
-fun PantallaLogin(modifier: Modifier = Modifier) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize().border(2.dp, Color.Black).height(200.dp),
+fun GoToLogin(context: Context) {
+    Button (
+        onClick = {
+            val intent = Intent(context, PantallaLoginActivity::class.java)
+            intent.putExtra("DATA-USERNAME", "domicoder")
+            intent.putExtra("DATA-PASSWORD", "Password-Inseguro")
+            context.startActivity(intent)
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58)),
     ) {
-        Text(
-            text = "Bienvenido",
-            modifier = modifier,
-            fontSize = 16.sp,
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "Usuario",
-            modifier = modifier,
-            fontSize = 12.sp,
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "Contraseña",
-            modifier = modifier,
-            fontSize = 12.sp,
-        )
-        Spacer(modifier = Modifier.weight(2f))
-        Text(
-            text = "Iniciar Sesión",
-            modifier = modifier,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-        )
+        Text(text = "Ir a Pantalla Login")
     }
 }
 
@@ -368,7 +387,6 @@ fun IconosSocialesPreview() {
         IconosSociales()
     }
 }
-
 
 //Ejercicio 4
 @Preview(showBackground = true)
@@ -420,17 +438,9 @@ fun BarraDeProgresoPreview() {
 @Composable
 fun TarjetaDeNoticiaPreview() {
     DomiJetpackComposeTheme {
-        TarjetaDeNoticia(title = "Color verde", authorName = "Unknown", publishedDate = "10/07/2025", articleContent = stringResource(R.string.article_content),)
+        TarjetaDeNoticia(title = "Color verde", authorName = "Unknown", publishedDate = "10/07/2025", articleContent = stringResource(R.string.article_content))
     }
 }
 
 //Ejercicio 10
-@Preview(showBackground = true)
-@Composable
-fun PantallaLoginPreview() {
-    DomiJetpackComposeTheme {
-        PantallaLogin()
-    }
-}
-
-
+//PantallaLoginActivity.kt
