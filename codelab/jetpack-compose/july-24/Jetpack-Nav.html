@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio de Navegación en Jetpack Compose (Sin Código)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .prose h1, .prose h2, .prose h3, .prose h4 {
+            color: #0F172A; /* slate-900 */
+        }
+        .prose p, .prose li {
+            color: #334155; /* slate-700 */
+        }
+        .prose strong {
+            color: #1E293B; /* slate-800 */
+        }
+        .prose code {
+            background-color: #E2E8F0; /* slate-200 */
+            color: #DC2626; /* red-600 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-header svg {
+            transition: transform 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div class="container mx-auto max-w-4xl px-4 py-8 md:py-12">
+        <article class="prose lg:prose-xl max-w-none">
+            <header class="text-center mb-12">
+                <h1>Ejercicio de Navegación: Flujo de Solicitud Bancaria (Sin Código)</h1>
+                <p class="lead">Este ejercicio te guiará para construir un flujo de solicitud de tarjeta de crédito de 5 pantallas. El objetivo es que escribas el código basándote únicamente en las instrucciones para practicar tus conocimientos.</p>
+            </header>
+
+            <div id="accordion-container">
+                <!-- Accordion Item 1: Conceptos -->
+                <div class="accordion-item bg-white rounded-lg shadow-sm mb-4">
+                    <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                        <h3 class="m-0 text-lg font-semibold">🎯 Conceptos que Aplicarás</h3>
+                        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <ul>
+                                <li><strong>Navigation Compose:</strong> <code>NavController</code>, <code>NavHost</code> y <code>NavGraph</code>.</li>
+                                <li><strong>Definición de Rutas:</strong> Crear rutas únicas para cada pantalla.</li>
+                                <li><strong>Navegación entre Composables:</strong> Usar <code>navController.navigate("ruta")</code>.</li>
+                                <li><strong>Limpieza del Back Stack:</strong> Volver a la pantalla de inicio de forma limpia con <code>popBackStack</code>.</li>
+                                <li><strong>Estado Básico:</strong> <code>remember</code> y <code>mutableStateOf</code> para los campos del formulario.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 2: Paso 1 -->
+                <div class="accordion-item bg-white rounded-lg shadow-sm mb-4">
+                    <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                        <h2 class="m-0 text-lg font-semibold">Paso 1: Añadir Dependencia de Navigation Compose</h2>
+                        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <p>Asegúrate de tener la dependencia de Navigation Compose en tu proyecto.</p>
+                            <ol>
+                                <li><strong>En <code>libs.versions.toml</code>:</strong> Añade la versión y la referencia para <code>androidx-navigation-compose</code>.</li>
+                                <li><strong>En <code>build.gradle.kts</code> (módulo app):</strong> Implementa la librería usando el alias del Version Catalog.</li>
+                                <li>Sincroniza tu proyecto.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 3: Paso 2 -->
+                <div class="accordion-item bg-white rounded-lg shadow-sm mb-4">
+                    <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                        <h2 class="m-0 text-lg font-semibold">Paso 2: Definir las Rutas y el Grafo de Navegación</h2>
+                        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <p>Crea un nuevo archivo, por ejemplo <code>AppNavigation.kt</code>, para centralizar la lógica de navegación.</p>
+                            <ol>
+                                <li><strong>Crea un <code>object AppRoutes</code>:</strong> Dentro de este objeto, define constantes (<code>const val</code>) para las cinco rutas: <code>BIENVENIDA</code>, <code>DATOS_PERSONALES</code>, <code>DATOS_FINANCIEROS</code>, <code>CONFIRMACION</code>, y <code>EXITO</code>.</li>
+                                <li><strong>Crea el Composable <code>AppNavigation</code>:</strong>
+                                    <ul>
+                                        <li>Dentro de esta función, inicializa tu <code>navController</code> usando <code>rememberNavController()</code>.</li>
+                                        <li>Configura el <code>NavHost</code>, estableciendo el <code>navController</code> y la <code>startDestination</code> a la ruta de bienvenida.</li>
+                                        <li>Define un <code>composable</code> para cada una de las cinco rutas.</li>
+                                        <li>Para cada <code>composable</code>, llama a la función de pantalla correspondiente (que crearás en el siguiente paso).</li>
+                                        <li>Pasa una lambda <code>onNavigateToNext</code> a las primeras cuatro pantallas. Dentro de la lambda, llama a <code>navController.navigate()</code> para ir a la siguiente pantalla del flujo.</li>
+                                        <li>Para la pantalla de <code>EXITO</code>, pasa una lambda <code>onNavigateToHome</code>. Dentro, llama a <code>navController.popBackStack()</code> para limpiar el historial y volver a la pantalla de bienvenida.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 4: Paso 3 -->
+                <div class="accordion-item bg-white rounded-lg shadow-sm mb-4">
+                    <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                        <h2 class="m-0 text-lg font-semibold">Paso 3: Crear las Pantallas (Composables)</h2>
+                        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <p>Ahora, crea cada una de las 5 pantallas como funciones Composable separadas.</p>
+                            <div class="mt-6 p-4 border-l-4 border-blue-500 bg-blue-50">
+                                <h4>Pantalla 1: <code>PantallaBienvenida</code></h4>
+                                <ul>
+                                    <li><strong>Recibe:</strong> Una lambda <code>onNavigateToNext: () -> Unit</code>.</li>
+                                    <li><strong>Contenido:</strong> Usa una <code>Column</code> centrada vertical y horizontalmente. Debe contener un <code>Text</code> para el título, otro para la descripción y un <code>Button</code> con el texto "Iniciar Solicitud" que ejecute la lambda <code>onNavigateToNext</code> en su <code>onClick</code>.</li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 border-l-4 border-blue-500 bg-blue-50">
+                                <h4>Pantalla 2: <code>PantallaDatosPersonales</code></h4>
+                                <ul>
+                                    <li><strong>Recibe:</strong> Una lambda <code>onNavigateToNext: () -> Unit</code>.</li>
+                                    <li><strong>Contenido:</strong> Usa una <code>Column</code>.
+                                        <ul>
+                                            <li>Define dos estados con <code>remember { mutableStateOf("") }</code> para el nombre y el email.</li>
+                                            <li>Añade un <code>Text</code> para el título del paso.</li>
+                                            <li>Añade dos <code>TextField</code>s, uno para el nombre y otro para el email, vinculados a sus respectivos estados.</li>
+                                            <li>Añade un <code>Button</code> "Siguiente" que llame a <code>onNavigateToNext</code>. El botón debe estar habilitado (<code>enabled</code>) solo si ambos campos de texto no están vacíos.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 border-l-4 border-blue-500 bg-blue-50">
+                                <h4>Pantalla 3: <code>PantallaDatosFinancieros</code></h4>
+                                <ul>
+                                    <li><strong>Recibe:</strong> Una lambda <code>onNavigateToNext: () -> Unit</code>.</li>
+                                    <li><strong>Contenido:</strong> Usa una <code>Column</code>.
+                                        <ul>
+                                            <li>Define un estado para los ingresos.</li>
+                                            <li>Añade un <code>Text</code> para el título del paso.</li>
+                                            <li>Añade un <code>TextField</code> para los ingresos mensuales, configurando el <code>keyboardType</code> para que sea numérico.</li>
+                                            <li>Añade un <code>Button</code> "Siguiente" que esté habilitado solo si el campo de ingresos no está vacío.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 border-l-4 border-blue-500 bg-blue-50">
+                                <h4>Pantalla 4: <code>PantallaConfirmacion</code></h4>
+                                <ul>
+                                    <li><strong>Recibe:</strong> Una lambda <code>onNavigateToNext: () -> Unit</code>.</li>
+                                    <li><strong>Contenido:</strong> Usa una <code>Column</code>.
+                                        <ul>
+                                            <li>Añade un <code>Text</code> para el título del paso.</li>
+                                            <li>Añade un <code>Text</code> pidiendo al usuario que revise sus datos (en un proyecto real, aquí mostrarías un resumen de los datos ingresados).</li>
+                                            <li>Añade un <code>Button</code> "Finalizar y Enviar" que llame a <code>onNavigateToNext</code>.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 border-l-4 border-blue-500 bg-blue-50">
+                                <h4>Pantalla 5: <code>PantallaExito</code></h4>
+                                <ul>
+                                    <li><strong>Recibe:</strong> Una lambda <code>onNavigateToHome: () -> Unit</code>.</li>
+                                    <li><strong>Contenido:</strong> Usa una <code>Column</code> centrada.
+                                        <ul>
+                                            <li>Muestra un ícono o emoji de éxito (✅).</li>
+                                            <li>Añade un <code>Text</code> con un mensaje de "¡Solicitud Enviada!".</li>
+                                            <li>Añade un <code>Button</code> "Volver al Inicio" que ejecute la lambda <code>onNavigateToHome</code> en su <code>onClick</code>.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 5: Paso 4 -->
+                <div class="accordion-item bg-white rounded-lg shadow-sm mb-4">
+                    <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                        <h2 class="m-0 text-lg font-semibold">Paso 4: Llamar a la Navegación en tu Actividad Principal</h2>
+                        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 pt-0">
+                            <p>Finalmente, en tu <code>MainActivity.kt</code>:</p>
+                            <ol>
+                                <li>Dentro del bloque <code>setContent</code> de <code>onCreate</code>, llama a tu tema principal de la aplicación.</li>
+                                <li>Dentro del tema, usa un <code>Surface</code>.</li>
+                                <li>Llama a tu Composable <code>AppNavigation()</code> para iniciar todo el flujo de navegación.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="text-center mt-12">
+                <p>¡Mucha suerte con el ejercicio!</p>
+            </footer>
+
+        </article>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const accordionItems = document.querySelectorAll('.accordion-item');
+
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                const content = item.querySelector('.accordion-content');
+                const icon = header.querySelector('svg');
+
+                header.addEventListener('click', () => {
+                    const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+                    // Close all other items
+                    accordionItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            const otherHeader = otherItem.querySelector('.accordion-header');
+                            const otherContent = otherItem.querySelector('.accordion-content');
+                            const otherIcon = otherHeader.querySelector('svg');
+                            otherHeader.setAttribute('aria-expanded', 'false');
+                            otherContent.style.maxHeight = null;
+                            otherIcon.style.transform = 'rotate(0deg)';
+                        }
+                    });
+
+                    // Toggle current item
+                    if (isExpanded) {
+                        header.setAttribute('aria-expanded', 'false');
+                        content.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        header.setAttribute('aria-expanded', 'true');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
