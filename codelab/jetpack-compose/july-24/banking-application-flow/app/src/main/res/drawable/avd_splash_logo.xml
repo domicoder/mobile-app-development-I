@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_new_credit_card_bro">
+
+    <target
+        android:name="loading_group"
+        android:animation="@animator/anim_bounce_in_out" />
+</animated-vector>
